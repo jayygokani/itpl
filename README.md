@@ -1,3 +1,5 @@
-# JS CLi Exercise
+# Introduction
 
+### js-cli-exercise
+- This folder contain Javascript CLI Exercise.
 
