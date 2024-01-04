@@ -30,5 +30,5 @@ $ node index.js
 
 ## For Question list and more info check below issue
 
-* [CLI Exercise - Javascript](https://git.pride.improwised.dev/Onboarding-2024/Jay-Gokani/issues/1)
+* [CLI Exercise - Javascript](https://git.pride.improwised.dev/Onboarding-2024/Jay-Gokani/issues/2)
 * Crate your issue question wise and add that issue link in main above issue
