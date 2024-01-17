@@ -1,6 +1,0 @@
-[submodule "lba"]
-	path = lba
-	url = https://github.com/javedbaloch4/laravel-booking-app.git
-[submodule "git-lba"]
-	path = git-lba
-	url = https://github.com/javedbaloch4/laravel-booking-app.git
