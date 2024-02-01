@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Counter App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1 id="counter-display">Counter: 0</h1>
+  <button id="increase-btn">Increase Counter</button>
+  <button id="reset-btn">Reset Counter</button>
+  <div id="joke-container"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const counterDisplay = document.getElementById('counter-display');
+      const increaseBtn = document.getElementById('increase-btn');
+      const resetBtn = document.getElementById('reset-btn');
+      const jokeContainer = document.getElementById('joke-container');
+
+      // Function to fetch a joke from the JokeAPI
+      // Function to fetch a programming joke from your API
+      // Function to fetch a joke from your API
+      const fetchJoke = () => {
+        fetch('https://official-joke-api.appspot.com/random_joke') // Replace 'YOUR_API_URL' with the actual URL of your API
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(data => {
+            // Display the joke in the container
+            if (data.setup && data.punchline) {
+              jokeContainer.textContent = `${data.setup}: ${data.punchline}`;
+            } else {
+              // If setup or punchline is missing, display a generic message
+              jokeContainer.textContent = 'Invalid joke format';
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching joke:', error);
+          });
+      };
+
+
+      // Function to fetch the latest counter value from the server
+      const fetchCounterFromServer = () => {
+        fetch('/getCounter')
+          .then(response => response.json())
+          .then(data => {
+            // Update the counter display with the latest value from the server
+            const counter = data.counter;
+            counterDisplay.textContent = `Counter: ${counter}`;
+
+            // Store the updated counter value in local storage
+            localStorage.setItem('counter', counter);
+
+            // Fetch a joke when the counter is increased
+            if (counter > 0) {
+              fetchJoke();
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching counter:', error);
+          });
+      };
+
+      // Retrieve the counter value from local storage
+      let counter = localStorage.getItem('counter') || 0;
+      counterDisplay.textContent = `Counter: ${counter}`;
+
+      increaseBtn.addEventListener('click', () => {
+        // Trigger the server to increase the counter
+        fetch('/increaseCounter', { method: 'POST' })
+          .then(response => response.json())
+          .then(data => {
+            // Update the counter display with the new value
+            const counter = data.counter;
+            counterDisplay.textContent = `Counter: ${counter}`;
+
+            // Store the updated counter value in local storage
+            localStorage.setItem('counter', counter);
+
+            // Fetch a joke when the counter is increased
+            fetchJoke();
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      });
+
+      resetBtn.addEventListener('click', () => {
+        // Trigger the server to reset the counter
+        fetch('/resetCounter', { method: 'POST' })
+          .then(response => response.json())
+          .then(data => {
+            // Update the counter display with the new value
+            const counter = data.counter;
+            counterDisplay.textContent = `Counter: ${counter}`;
+
+            // Store the updated counter value in local storage
+            localStorage.setItem('counter', counter);
+
+            // Clear the joke container when the counter is reset
+            jokeContainer.textContent = '';
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      });
+
+      // Fetch the latest counter value from the server on page load
+      fetchCounterFromServer();
+    });
+  </script>
+
+</body>
+</html>
