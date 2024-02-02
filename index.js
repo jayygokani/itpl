@@ -1,9 +1,10 @@
 const express = require('express');
-const { Pool } = require('pg');
-require('dotenv').config();
-const app = express();
-const port = 3000;
 const path = require('path');
+require('dotenv').config();
+const { Pool } = require('pg');
+const app = express();
+const host = process.env.HOST || "0.0.0.0"
+const port = process.env.PORT || 3000;
 // const { app, initializeDatabase } = require('./server/server');
 
 const pool = new Pool({
@@ -80,8 +81,8 @@ async function startServer() {
   app.use('/', express.static(path.join(__dirname, 'public')))
   
   // Start the server
-  app.listen(port, "0.0.0.0", () => {
-    console.log(`Server is running at http://0.0.0.0:${port}`);
+  app.listen(port, host, () => {
+    console.log(`Server is running at http://${host}:${port}`);
   });
 }
 
