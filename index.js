@@ -16,7 +16,7 @@ const pool = new Pool({
 
 app.post('/increaseCounter', async (req, res) => {
   try {
-    const threshold = 1;
+    const threshold = 10;
     let count = await pool.query('UPDATE counter set count=count+$1 RETURNING count;', [threshold]);
 
     res.json({ count: count.rows[0].count });
