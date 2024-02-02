@@ -52,7 +52,7 @@
           .then(response => response.json())
           .then(data => {
             // Update the counter display with the latest value from the server
-            const counter = data.counter;
+            const counter = data.count;
             counterDisplay.textContent = `Counter: ${counter}`;
 
             // Store the updated counter value in local storage
@@ -78,7 +78,7 @@
           .then(response => response.json())
           .then(data => {
             // Update the counter display with the new value
-            const counter = data.counter;
+            const counter = data.count;
             counterDisplay.textContent = `Counter: ${counter}`;
 
             // Store the updated counter value in local storage
@@ -98,7 +98,7 @@
           .then(response => response.json())
           .then(data => {
             // Update the counter display with the new value
-            const counter = data.counter;
+            const counter = data.count;
             counterDisplay.textContent = `Counter: ${counter}`;
 
             // Store the updated counter value in local storage

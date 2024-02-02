@@ -12,6 +12,7 @@ services:
     volumes:
       - learnNode:/var/lib/postgresql/data
   node-app:
+    restart: always
     depends_on:
       - postgres
     image: node:14

@@ -14,53 +14,26 @@ const pool = new Pool({
   port: process.env.DB_PORT,
 });
 
-// Check if the 'counter' table exists, and create it if not
-async function initializeDatabase() {
-  const createTableQuery = `
-    CREATE TABLE IF NOT EXISTS counter (
-      id SERIAL PRIMARY KEY,
-      count INT
-    );
-  `;
-  await pool.query(createTableQuery);
-}
-
-// initializeDatabase();
-
-let counter = 0;
-
-
 app.post('/increaseCounter', async (req, res) => {
   try {
-    // Fetch the existing count from the 'counter' table
-    const result = await pool.query('SELECT count FROM counter WHERE id = $1', [1]);
+    const threshold = 1;
+    let count = await pool.query('UPDATE counter set count=count+$1 RETURNING count;', [threshold]);
 
-    // If there is a result, use the existing count, otherwise default to 0
-    let counter = result.rows.length > 0 ? result.rows[0].count : 0;
-
-    // Increment the counter
-    counter++;
-
-    // Update the existing row in the 'counter' table with the new count
-    await pool.query('INSERT INTO counter (id, count) VALUES ($1, $2) ON CONFLICT (id) DO UPDATE SET count = $2', [1, counter]);
-
-    // Send the response with the updated counter value
-    res.json({ counter });
+    res.json({ count: count.rows[0].count });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).send('Internal Server Error');
   }
 });
 
-// ... (previous code)
 
 app.post('/resetCounter', async (req, res) => {
   try {
     // Reset the counter to 0 in the database
-    await pool.query('UPDATE counter SET count = $1 WHERE id = $2', [0, 1]);
-
+    let count = await pool.query('UPDATE counter SET count = 0 RETURNING count');
+    
     // Send the response with the updated counter value
-    res.json({ counter: 0 });
+    res.json({ count: count.rows[0].count });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).send('Internal Server Error');
@@ -69,44 +42,46 @@ app.post('/resetCounter', async (req, res) => {
 app.get('/getCounter', async (req, res) => {
   try {
     // Fetch the current counter value from the database
-    const result = await pool.query('SELECT count FROM counter WHERE id = $1', [1]);
-
-    // If there is a result, use the existing count, otherwise default to 0
-    const counter = result.rows.length > 0 ? result.rows[0].count : 0;
-
+    const result = await pool.query('SELECT count FROM counter');
+    
     // Send the response with the current counter value
-    res.json({ counter });
+    res.json({ count: result.rows[0].count });
   } catch (error) {
     console.error('Error fetching counter:', error);
     res.status(500).send('Internal Server Error');
   }
 });
 
-
-// ... (remaining code)
-
-
-
-/**
- * POST
- * UPDATE table set counter+=1
- */
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+async function initializeDatabase() {
+  const createTableQuery = `
+    CREATE TABLE IF NOT EXISTS counter (
+      count INT
+    );
+  `;
+  await pool.query(createTableQuery);
+  console.log("TABLE CREATED!")
+  const result = await pool.query('SELECT count FROM counter');
+  console.log("SELECT TABLE DONE", result.rowCount)
+    
+  if(result.rowCount<=0){
+    await pool.query('INSERT into counter (count) values(0)');
+    console.log("SINGLE CELL CREATED")
+  }
 }
-
-async function startServer() {
-  await sleep(5000); // Add a delay of 10 seconds
-
-  initializeDatabase();
-
+async function startServer() {  
+  try {
+    await initializeDatabase();
+  } catch(error) {
+    console.error(error);
+    process.exit(1)
+  }
+  
   // Serve static files from the 'public' directory
   app.use('/', express.static(path.join(__dirname, 'public')))
-
+  
   // Start the server
-  app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+  app.listen(port, "0.0.0.0", () => {
+    console.log(`Server is running at http://0.0.0.0:${port}`);
   });
 }
 
