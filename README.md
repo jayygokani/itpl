@@ -26,9 +26,10 @@ As mentioned earlier, the value of counter is stored in database and we want to 
 
 # Part 2: docker for production 
 
-Now using the code where we are increasing the counter by 10, create dockerfile for production, named Dockerfile and deploy the application again. This time when you increase counter, it should increase counter by 10 because we used code in the image where it increases counter by 10. Also debug logs should not be shown in your terminal, just info logs. 
-
+Now using the code where we are increasing the counter by 10, create dockerfile for production, named Dockerfile and deploy the application again. This time when you increase counter, it should increase counter by 10 because we used code in the image where it increases counter by 10. 
 ## Browine points 
 Deploy any of the following apps using docker compose: 
 Autin: https://github.com/atuinsh/atuin
-Diectus: https://github.com/directus/directus
+Directus: https://github.com/directus/directus
+
+Create a branch with your name and push your changes there for the record.
