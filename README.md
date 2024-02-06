@@ -1,5 +1,5 @@
-# deploying Node Application for dev-environment
-Here's a very basic node application with two buttons: one that increase counter and one that resets the count.
+# Counter App
+A very basic node application with two buttons: one that increase counter and one that resets the count.
 It uses postgresql as database to store the counter.
 
 To start node server:
@@ -15,7 +15,7 @@ We want to deploy it using docker and do few test by completing following tasks:
 # Part 1: docker for development
 
 ## Task 1 : 
-Create a Dockerfile named dev-Dockerfile for the application and deploy it , note that you're not allowed to use host network so deploy it accordingly
+Create a Dockerfile named develop.Dockerfile for the application and deploy it , note that you're not allowed to use host network so deploy it accordingly
 Once you deploy it, and access it using your browser, you will see the counter is increased by one and you should be able to see it's logs in the terminal whenever we click the button. What we want is to increase it by 10.
 
 ## Task 2: 
