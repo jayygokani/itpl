@@ -8,15 +8,14 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=user
       - POSTGRES_DB=counter
-    volumes: 
-      - data:/var/lib/mysql
-    restart: unless-stopped
+    volumes:
+      - learnNode:/var/lib/postgresql/data
 
   node-app-dev:
-    image: node:14.0.0
+    image: node:14
     build:
       context: .
-    command: "npm install && npm run dev"
+    command: "npm install --no-optional && npm run dev"
     ports:
       - 8000:8000
     working_dir: /jay
@@ -24,7 +23,7 @@ services:
       - ./:/jay
     environment:
       DB_CONNECTION: postgres
-      DB_HOST: psql
+      DB_HOST: postgres
       DB_PORT: 5432
       DB_DATABASE: counter
       DB_USERNAME: user
@@ -32,5 +31,5 @@ services:
     restart: unless-stopped
       
 volumes:
-  data: 
+  learnNode:
 
