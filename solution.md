@@ -7,6 +7,7 @@ So we run our development application with sleep infinity command (see develop.D
 2. exec inside the app container  
 3. install dependencies using npm insall  
 4. start development server using npm start dev
+(can you think of any other way?!)  
 
 Now if you checkout project repo in vscode, node_modules will be present there.
 Make necessary changes in code, as soon as you save it, it will be reflected in your browser.  That is the beauty of development server, all you need is a bindmount volume  and you can see the changes live with just saving the file. 
