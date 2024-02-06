@@ -1,0 +1,36 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:14-alpine
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=user
+      - POSTGRES_DB=counter
+    volumes: 
+      - data:/var/lib/mysql
+    restart: unless-stopped
+
+  node-app-dev:
+    image: node:14.0.0
+    build:
+      context: .
+    command: "npm install && npm run dev"
+    ports:
+      - 8000:8000
+    working_dir: /jay
+    volumes:
+      - ./:/jay
+    environment:
+      DB_CONNECTION: postgres
+      DB_HOST: psql
+      DB_PORT: 5432
+      DB_DATABASE: counter
+      DB_USERNAME: user
+      DB_PASSWORD: password
+    restart: unless-stopped
+      
+volumes:
+  data: 
+
