@@ -3,9 +3,14 @@ const path = require('path');
 require('dotenv').config();
 const { Pool } = require('pg');
 const app = express();
-const host = process.env.HOST || "0.0.0.0"
+const host = process.env.HOST || "0.0.0.0";
 const port = process.env.PORT || 3000;
-// const { app, initializeDatabase } = require('./server/server');
+const pino = require('pino');
+const isDev = process.env.NODE_ENV == "development" || false;
+
+const logger = pino({
+  level: isDev ? "debug" : "info"
+})
 
 const pool = new Pool({
   user: process.env.DB_USER,
@@ -17,12 +22,13 @@ const pool = new Pool({
 
 app.post('/increaseCounter', async (req, res) => {
   try {
-    const threshold = 10;
+    const threshold = 1;
+    logger.debug({threshold}, "counter increased.")
     let count = await pool.query('UPDATE counter set count=count+$1 RETURNING count;', [threshold]);
 
     res.json({ count: count.rows[0].count });
   } catch (error) {
-    console.error('Error:', error);
+    logger.error({error}, "error occured while increasing counter")
     res.status(500).send('Internal Server Error');
   }
 });
@@ -30,13 +36,13 @@ app.post('/increaseCounter', async (req, res) => {
 
 app.post('/resetCounter', async (req, res) => {
   try {
-    // Reset the counter to 0 in the database
+    logger.debug("counter reset to 0.")
     let count = await pool.query('UPDATE counter SET count = 0 RETURNING count');
     
     // Send the response with the updated counter value
     res.json({ count: count.rows[0].count });
   } catch (error) {
-    console.error('Error:', error);
+    logger.error({error}, "error occured while reseting counter")
     res.status(500).send('Internal Server Error');
   }
 });
@@ -48,7 +54,7 @@ app.get('/getCounter', async (req, res) => {
     // Send the response with the current counter value
     res.json({ count: result.rows[0].count });
   } catch (error) {
-    console.error('Error fetching counter:', error);
+    logger.error({error}, "error occured while fetching counter")
     res.status(500).send('Internal Server Error');
   }
 });
@@ -60,20 +66,19 @@ async function initializeDatabase() {
     );
   `;
   await pool.query(createTableQuery);
-  console.log("TABLE CREATED!")
+  logger.debug("table(s) created.")
   const result = await pool.query('SELECT count FROM counter');
-  console.log("SELECT TABLE DONE", result.rowCount)
     
   if(result.rowCount<=0){
     await pool.query('INSERT into counter (count) values(0)');
-    console.log("SINGLE CELL CREATED")
   }
+  logger.debug("migrations completed.")
 }
 async function startServer() {  
   try {
     await initializeDatabase();
   } catch(error) {
-    console.error(error);
+    logger.error({error}, "error occured init database")
     process.exit(1)
   }
   
@@ -82,7 +87,7 @@ async function startServer() {
   
   // Start the server
   app.listen(port, host, () => {
-    console.log(`Server is running at http://${host}:${port}`);
+    logger.info({host, port}, "server is running...")
   });
 }
 
