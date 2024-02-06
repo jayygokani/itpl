@@ -6,7 +6,7 @@ So we run our development application with sleep infinity command (see develop.D
 1. docker compose up
 2. exec inside the app container  
 3. install dependencies using npm insall  
-4. start development server using npm start dev
+4. start development server using npm start dev  
 (can you think of any other way?!)  
 
 Now if you checkout project repo in vscode, node_modules will be present there.
