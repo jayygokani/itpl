@@ -10,7 +10,7 @@ const isDev = process.env.NODE_ENV == "development" || false;
 
 const logger = pino({
   level: isDev ? "debug" : "info"
-})
+}) 
 
 const pool = new Pool({
   user: process.env.DB_USER,
@@ -19,6 +19,7 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
 });
+
 
 app.post('/increaseCounter', async (req, res) => {
   try {
