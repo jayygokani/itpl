@@ -1,4 +1,5 @@
 # Counter App
+Requires node v14
 A very basic node application with two buttons: one that increase counter and one that resets the count.
 It uses postgresql as database to store the counter.
 
