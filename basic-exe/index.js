@@ -1,9 +1,12 @@
-const a = {
-    name:'Jay',
-    age:24
+function p(){
+    console.log("p function");
+    function c(a)
+    {
+        return 10;
+        // console.log("c fucntion");
+    }
+    // c();
 }
 
-console.log(a.name);
-console.log(a.address);
-a.address = 'Rajkot'
-console.log(a.address);
+// p();
+console.log(p())
