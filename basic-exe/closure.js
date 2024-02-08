@@ -1,5 +1,7 @@
 function parent(x){
+
     function childOne(y){
+        console.log('hello')
         return x * y;
     }
 
@@ -10,14 +12,19 @@ function parent(x){
     function childThree(y){
         return x ** y;
     }
+    
     return {
         c1: childOne,
         c2: childTwo,
         c3: childThree
     }
+
 }
 
 let nfunc = parent(10);
+
+// nfunc.c1(5)
+
 console.log("childOne function = " + nfunc.c1(2));
 console.log("childTwo function = " + nfunc.c2(2));
 console.log("childThree function = " + nfunc.c3(2));
