@@ -16,6 +16,15 @@ function asyncFunction2(){
 	});
 };
 
+asyncFunction1().then((res) => {
+	return asyncFunction2();
+}).then((res) => {
+	return asyncFunction1();
+}).then((res) => {
+	console.log(res);
+})
+
+/*
 console.log("Fetching data 1 .....");
 asyncFunction1().then((res) => {
 	// console.log(res);
@@ -25,7 +34,7 @@ asyncFunction1().then((res) => {
 		// console.log(res);
 	});
 })
-
+*/
 
 
 /*
