@@ -5,7 +5,7 @@ function getData(data){
             setTimeout(() => {
                 resolve('Success *******');
             })
-            reject("FAIL ***");
+            // reject("FAIL ***");
         }, 1500);
     })
 }
