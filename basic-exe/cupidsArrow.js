@@ -1,3 +1,31 @@
+users = {
+    fname: 'J',
+    lname: 'G',
+
+    getData: function getData(){
+        console.log(this.fname)
+
+    },
+
+    getDataAnonymous: function () {
+        console.log(this.fname)
+    },
+
+    getDataArrow: () => {
+        console.log(this.fname)
+    }
+}
+
+console.log('getData: ')
+console.log(users.getData())
+
+console.log('getDataAnonymous: ')
+console.log(users.getDataAnonymous())
+
+console.log('getDataArrow: ')
+users.getDataArrow();
+
+/*
 let person = {
     id: 890,
 
@@ -19,8 +47,9 @@ let person = {
         console.log(this.id)
     }
 }
+*/
 
-person.getIdArrow();
+// person.getIdArrow();
 
 // person.getId();
 
