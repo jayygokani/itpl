@@ -7,6 +7,7 @@
     "start": "echo \"started the script\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "type": "module",
   "author": "Jay Gokani",
   "license": "ISC",
   "dependencies": {
