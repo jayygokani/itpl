@@ -4,15 +4,18 @@ Exercise 1 - this code returns the number of people in a particular movie
 
 import {parseCSV} from './modules/ProcessDataMain.js'
 
-let filePathTitles = "./assets/titles.csv"
+const filePathTitles = "./assets/titles.csv"
+const filePathCredits = "./assets/credits.csv";
+
+(async () => {
+    await getTitlesAndCheckCreditsCount()
+})()
 
 
-getFilterData(filePathTitles)
 
-
-async function getFilterData(filePath) {
+async function getTitlesAndCheckCreditsCount() {
     try {
-        let dataTitles = await parseCSV(filePath)
+        let dataTitles = await parseCSV(filePathTitles)
         const size = dataTitles.length;
         
         for (let i = 0; i < size; i++){
@@ -27,10 +30,22 @@ async function getFilterData(filePath) {
 
 // Initialize dataCredits map datastructure
 let dataCreditsMap = new Map();
-const filePathCredits = "./assets/credits.csv";
+// let dataCreditsObject;
 
 async function initializeData() {
     try {
+        dataCreditsObject = {};
+
+        // const dataCredits = await parseCSV(filePathCredits);
+        // dataCredits.forEach(element => {
+        //     const titleId = element.id;
+        //     if (!dataCreditsObject){
+        //     dataCreditsObject[titleId] = (dataCreditsObject[titleId] || 0) + 1;
+        //     }
+        //     return dataCreditsObject[titleId] || 0;
+        // })
+
+
         const dataCredits = await parseCSV(filePathCredits);
         dataCredits.forEach(element => {
             const titleId = element.id;
@@ -40,9 +55,9 @@ async function initializeData() {
                 dataCreditsMap.set(titleId, 1);
             }
         });
+
     } catch (error) {
-        console.error("Error initializing data:", error);
-        throw error;
+        throw new Error('Error initializing data');
     }
 }
 
