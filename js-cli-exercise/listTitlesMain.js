@@ -2,7 +2,7 @@
 Exercise 1 - this code returns the number of people in a particular movie
 */
 
-import {parseCSV} from './modules/ProcessDataMainRev.js'
+import {parseCSV} from './modules/ProcessDataMain.js'
 
 let filePathTitles = "./assets/titles.csv"
 
