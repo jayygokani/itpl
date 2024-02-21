@@ -7,71 +7,54 @@ import {parseCSV} from './modules/ProcessDataMain.js'
 const filePathTitles = "./assets/titles.csv"
 const filePathCredits = "./assets/credits.csv";
 
-(async () => {
-    await getTitlesAndCheckCreditsCount()
-})()
-
-
+getTitlesAndCheckCreditsCount().then((res) => {
+    console.table(res);
+}).catch((err) => {
+    console.log(err);
+})
 
 async function getTitlesAndCheckCreditsCount() {
     try {
         let dataTitles = await parseCSV(filePathTitles)
-        const size = dataTitles.length;
         
-        for (let i = 0; i < size; i++){
-            console.log(`${dataTitles[i].title} : ${await getCreditsCount(dataTitles[i].id)}`)
+        const size = dataTitles.length;
+        if(size == 0){
+            throw new Error('data not found.')
+        }
+        const result = [];
+
+        for (const title of dataTitles) {
+            const creditsCount = await getCreditsCount(title.id);
+            result.push({ title: title.title, creditsCount });
         }
 
+        return result;
+
     } catch (error) {
-        throw error;
+        throw error.message;
     }
 }
 
-
-// Initialize dataCredits map datastructure
-let dataCreditsMap = new Map();
-// let dataCreditsObject;
+let dataCreditsObject;
 
 async function initializeData() {
     try {
+        const dataCredits = await parseCSV(filePathCredits);
         dataCreditsObject = {};
 
-        // const dataCredits = await parseCSV(filePathCredits);
-        // dataCredits.forEach(element => {
-        //     const titleId = element.id;
-        //     if (!dataCreditsObject){
-        //     dataCreditsObject[titleId] = (dataCreditsObject[titleId] || 0) + 1;
-        //     }
-        //     return dataCreditsObject[titleId] || 0;
-        // })
-
-
-        const dataCredits = await parseCSV(filePathCredits);
-        dataCredits.forEach(element => {
+        dataCredits.forEach((element) => {
             const titleId = element.id;
-            if (dataCreditsMap.has(titleId)) {
-                dataCreditsMap.set(titleId, dataCreditsMap.get(titleId) + 1);
-            } else {
-                dataCreditsMap.set(titleId, 1);
-            }
+            dataCreditsObject[titleId] = (dataCreditsObject[titleId] || 0) + 1;
         });
-
     } catch (error) {
-        throw new Error('Error initializing data');
+        throw new error('Error');
     }
 }
 
-
-// getCreditsCount function
 async function getCreditsCount(titleId) {
-    if (dataCreditsMap.size === 0) {
+    if (!dataCreditsObject) {
         await initializeData();
     }
-    
-    try {
-        return dataCreditsMap.get(titleId) || 0;
-    } catch (error) {
-        console.error("Error counting credits:", error);
-        throw error;
-    }
+
+    return dataCreditsObject[titleId] || 0;
 }
