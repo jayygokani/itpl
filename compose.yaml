@@ -1,0 +1,36 @@
+services:
+  app:
+    # build:
+    #   context: .
+    #   dockerfile: dev.dockerfile
+    image: dummyphpapp:2
+    command: sh -c "php artisan migrate:refresh --seed --force && php artisan serve --host=0.0.0.0 --port=80"
+    ports:
+      - "8080:80"
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: apply
+      DB_USERNAME: root
+      DB_PASSWORD: root
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    
+  mysql:
+    image: mysql
+    volumes:
+      - mysql-data:/var/www/html
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: apply
+      MYSQL_PORT: 3306
+    # command: --default_authentication_plugin=mysql_native_password
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
