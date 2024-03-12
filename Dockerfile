@@ -27,6 +27,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 RUN composer update --no-scripts && composer install --no-scripts
 RUN compose dump-autoload
+RUN chmod -R 755 /var/www/html/vendor
+
 # RUN cp .env.example .env
 
 RUN chown -R www-data:www-data /var/www/html
