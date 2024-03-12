@@ -27,8 +27,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 RUN composer update && composer install
 
-RUN cp .env.example .env
-
 RUN chown -R www-data:www-data /var/www/html
 
 RUN php artisan key:generate
