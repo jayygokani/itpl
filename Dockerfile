@@ -25,9 +25,9 @@ RUN docker-php-ext-install pdo_mysql
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN composer update && composer install
-
-RUN cp .env.example .env
+RUN composer update --no-scripts && composer install --no-scripts
+RUN compose dump-autoload
+# RUN cp .env.example .env
 
 RUN chown -R www-data:www-data /var/www/html
 
